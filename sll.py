@@ -135,55 +135,177 @@ class LinkedList:
         """
         Removes SLNode at specified index in LinkedList
         """
-        return
+        # handle case where index < 0
+        if index < 0:
+            raise SLLException
+
+        # handle case where LinkedList is empty
+        if self.head.next == self.tail:
+            raise SLLException
+
+        # iterate through nodes in search of index to remove
+        current = self.head.next
+        prior = self.head
+        i = 0
+        while i != index:
+            # handle case where index is out of range
+            if current.next == self.tail:
+                raise SLLException
+            current = current.next
+            prior = prior.next
+            i += 1
+
+        # now current is node at specified index, so remove current
+        prior.next = current.next
 
     def get_front(self) -> object:
         """
-        TODO: Write this implementation
+        Returns first non-head node value without removal
         """
-        return 0
+        # handle case where LinkedList is empty
+        if self.head.next == self.tail:
+            raise SLLException
+
+        # return expected object/value
+        return self.head.next.value
 
     def get_back(self) -> object:
         """
-        TODO: Write this implementation
+        Returns last non-tail node value without removal
         """
-        return 0
+        # handle case where LinkedList is empty
+        if self.head.next == self.tail:
+            raise SLLException
+
+        # iterate through LinkedList in search of last no-tail node
+        last_node = self.head.next
+        while last_node.next != self.tail:
+            last_node = last_node.next
+
+        # return expected object/value
+        return last_node.value
 
     def remove(self, value: object) -> bool:
         """
-        TODO: Write this implementation
+        Removes first node containing value argument and indicates if successful
         """
+        # handle case where LinkedList is empty
+        if self.head.next == self.tail:
+            return False
+
+        # iterate through nodes in search of matching value property
+        current = self.head.next
+        prior = self.head
+        while current != self.tail and current.value != value:
+            current = current.next
+            prior = prior.next
+
+        # handle case where value was not found in the LinkedList
+        if current == self.tail:
+            return False
+
+        # handle case where value was found in the LinkedList
+        prior.next = current.next
         return True
 
     def count(self, value: object) -> int:
         """
-        TODO: Write this implementation
+        Counts number of non-head/tail elements that have value property matching argument
         """
-        return 0
+        # iterate through LinkedList while counting each 'hit' once
+        count = 0
+        current = self.head
+        while current.next != self.tail:
+            current = current.next
+            if current.value == value:
+                count += 1
+        return count
 
     def slice(self, start_index: int, size: int) -> object:
         """
-        TODO: Write this implementation
+        Returns a new LinkedList based on arguments passed
         """
-        return LinkedList()
+        # handle case where start_index < 0
+        if start_index < 0:
+            raise SLLException
+
+        # handle case where LinkedList is empty
+        if self.head.next == self.tail:
+            raise SLLException
+
+        # iterate through list in search of node located at start_index
+        index = 0
+        current = self.head.next
+        while index != start_index and current.next != self.tail:
+            current = current.next
+            index += 1
+
+        # handle case where index out of range
+        if index != start_index:
+            raise SLLException
+
+        # build new LinkedList while checking whether offset falls out of range
+        new_LL = LinkedList()
+        for count in range(size):
+            new_LL.add_back(current.value)
+            # handle case where offset is out of range
+            if current.next == self.tail and count < size - 1:
+                raise SLLException
+            current = current.next
+
+        return new_LL
 
     def is_sorted(self) -> int:
         """
-        TODO: Write this implementation
+        Indicates whether LinkedList is sorted
         """
-        return 0
+        # handle case where LinkedList is empty or contains a single node
+        if self.length() < 2:
+            return 1
+
+        # iterate through list to determine whether it is strictly ascending/descending
+        strictly_ascending = True
+        strictly_descending = True
+        current = self.head.next
+        prior = self.head
+        while current.next != self.tail:
+            current = current.next
+            prior = prior.next
+            # handle case where pair of nodes is not strictly ascending
+            if current.value <= prior.value:
+                strictly_ascending = False
+            # handle case where pair of nodes is not strictly descending
+            if current.value >= prior.value:
+                strictly_descending = False
+
+        # return indicator to user based on findings in while-loop
+        if strictly_ascending:
+            return 1
+        elif strictly_descending:
+            return 2
+        else:
+            return 0
 
     def length(self) -> int:
         """
-        TODO: Write this implementation
+        Returns number of non-head/tail nodes in LinkedList
         """
-        return 0
+        # iterate through LinkedList while counting each node once
+        count = 0
+        current = self.head
+        while current.next != self.tail:
+            current = current.next
+            count += 1
+        return count
 
     def is_empty(self) -> bool:
         """
-        TODO: Write this implementation
+        Indicates whether LinkedList is empty
         """
-        return True
+        if self.head.next == self.tail:
+            return True
+        else:
+            return False
 
 
 if __name__ == '__main__':
