@@ -1,7 +1,9 @@
 # Course: CS261 - Data Structures
 # Student Name: Mallory Huston
 # Assignment: 3, Part 4
-# Description: Implementation of the Two-Stack Queue ADT class as described in the given specifications.
+# Description: Implementation of the Two-Stack Queue ADT class
+#              as well as using the MaxStack ADT as underlying
+#              code for the Queue ADT.
 
 from max_stack_sll import *
 
@@ -34,27 +36,49 @@ class Queue:
 
     def enqueue(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        Adds new node immediately after the head of the LinkedList
         """
-        return
+        self.s1.push(value)
 
     def dequeue(self) -> object:
         """
-        TODO: Write this implementation
+        Removes and returns the value from the beginning of the queue
         """
-        return 0
+        # handle case where queue is empty
+        if self.s1.is_empty():
+            raise QueueException
+
+        # iterate through Queue.s1 and enqueue items into MaxStack.s2
+        value = None
+        while not self.s1.is_empty():
+            value = self.s1.pop()
+            self.s2.push(value)
+
+        # pop top item off of Queue.s2 because it should be removed from Queue
+        self.s2.pop()
+
+        # enqueue elements from Queue.s2 back into Queue.s1
+        while not self.s2.is_empty():
+            temp = self.s2.pop()
+            self.s1.push(temp)
+
+        # return value from the beginning of the Queue
+        return value
 
     def is_empty(self) -> bool:
         """
-        TODO: Write this implementation
+        Indicates whether the Queue is empty (no elements)
         """
-        return True
+        if self.s1.is_empty():
+            return True
+        else:
+            return False
 
     def size(self) -> int:
         """
-        TODO: Write this implementation
+        Returns the number of elements in the Queue
         """
-        return 0
+        return self.s1.size()
 
 
 # BASIC TESTING
