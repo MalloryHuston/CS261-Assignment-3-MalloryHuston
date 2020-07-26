@@ -1,7 +1,9 @@
 # Course: CS261 - Data Structures
 # Student Name: Mallory Huston
-# Assignment: 3, Part 3
-# Description: Implementation of the Max Stack ADT class as described in the given specifications.
+# Assignment: 3, Part 2
+# Description: Implementation of a stack built off of a singly linked list
+#              structure. Implementation should also keep track of max value
+#              of stack for O(1) getter method.
 
 from sll import *
 
@@ -34,39 +36,71 @@ class MaxStack:
 
     def push(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        Adds node containing value to top of the stack
         """
-        return
+        # add node to front of MaxStack.sll_val
+        self.sll_val.add_front(value)
+
+        # handle case where MaxStack.sll_max is empty
+        if self.sll_max.is_empty():
+            self.sll_max.add_front(value)
+
+        # handle case where MaxStack.sll_max is not empty
+        current_max = self.sll_max.get_front()
+        if value > current_max:
+            self.sll_max.add_front(value)
+        else:
+            self.sll_max.add_front(current_max)
 
     def pop(self) -> object:
         """
-        TODO: Write this implementation
+        Removes top element from stack and returns its value
         """
-        return 0
+        # handle case where MaxStack is empty
+        if self.sll_val.is_empty():
+            raise StackException
+
+        # maintain MaxStack.sll_max by removing front node
+        self.sll_max.remove_front()
+
+        # remove top element from MaxStack.sll_val and return value to user
+        top_value = self.sll_val.get_front()
+        self.sll_val.remove_front()
+        return top_value
 
     def top(self) -> object:
         """
-        TODO: Write this implementation
+        Returns value of the top of the stack in a non-destructive manner
         """
-        return 0
+        # handle case where stack is empty
+        if self.sll_val.is_empty():
+            raise StackException
+
+        # get and return value from top of stack
+        return self.sll_val.get_front()
 
     def is_empty(self) -> bool:
         """
-        TODO: Write this implementation
+        Indicates whether MaxStack is empty
         """
-        return True
+        return self.sll_val.is_empty()
 
     def size(self) -> int:
         """
-        TODO: Write this implementation
+        Returns the number of elements in the MaxStack
         """
-        return 0
+        return self.sll_val.length()
 
     def get_max(self) -> object:
         """
-        TODO: Write this implementation
+        Returns maximum value currently stored in MaxStack
         """
-        return 0
+        # handle case where MaxStack is empty
+        if self.is_empty():
+            raise StackException
+
+        # return top value from the self.sll_max LinkedList
+        return self.sll_max.get_front()
 
 
 # BASIC TESTING
